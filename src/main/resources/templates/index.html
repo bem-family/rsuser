@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <!-- windows phone 点击无高光 --> 
   <!-- <meta name="msapplication-tap-highlight" content="no" /> -->
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -226,13 +228,25 @@
             <li><a href="#">联系我们</a></li>
         </ul>
     </footer>
+    
+    <form th:action="@{/testCSRF}" method="post" >
+    	<input type="text" name="username"/>
+    	<input type="text" name="password"/>
+    	<input type="button" id="testCSRF" value="input"/>
+    </form>
   </main>
 </div>
-
 
 <script src="../static/js/jquery-1.11.3.min.js" th:src="@{/js/jquery-1.11.3.min.js}"></script>
 <script src="../static/js/material.min.js" th:src="@{/js/material.min.js}"></script>
 <script src="../static/js/mdl-selectfield.min.js" th:src="@{/js/mdl-selectfield.min.js}"></script>
 <script src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 </body>
+<script>
+var token = $("meta[name='_csrf']").attr("content");  
+var header = $("meta[name='_csrf_header']").attr("content");
+$(document).ajaxSend(function(e, xhr, options) {  
+    xhr.setRequestHeader(header, token);  
+});
+</script>
 </html>
